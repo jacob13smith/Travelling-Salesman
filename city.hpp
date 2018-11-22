@@ -1,10 +1,20 @@
-//
-// Created by Jacob Smith on 2018-11-20.
-//
-
 #pragma once
 
+#include <string>
+
+using namespace std;
 
 class city {
-
+public:
+    static int id;
+    string name;
+    city();
+    int random_coord();
+    friend ostream& operator<<(ostream& os, const city& c);
+    friend bool operator==(const city &first, const city &second);
+    friend bool operator!=(const city &first, const city &second);
+    double distance(const city& other);
+private:
+    int x;
+    int y;
 };
