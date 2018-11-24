@@ -36,3 +36,11 @@ bool operator==(const city &first, const city &second) {
 bool operator!=(const city &first, const city &second) {
     return !operator==(first, second);
 }
+
+int city::get_x() {
+    return x;
+}
+
+int city::get_y() {
+    return y;
+}

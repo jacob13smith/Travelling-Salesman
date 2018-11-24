@@ -3,14 +3,18 @@
 #include <algorithm>
 #include "tour.hpp"
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
 int constexpr SCALAR_MULT = 10000;
+constexpr int SHUFFLES = 6;
 
 tour::tour(vector<city> new_cities) {
     cities = std::move(new_cities);
-    shuffle(cities.begin(), cities.end(), std::mt19937(std::random_device()()));
+    for (int i = 0; i < SHUFFLES; i++){
+        shuffle(cities.begin(), cities.end(), std::mt19937(std::random_device()()));
+    }
     calculate_fitness();
 }
 
@@ -30,7 +34,7 @@ double tour::get_fitness() const {
 }
 
 ostream &operator<<(ostream &os, const tour &t) {
-    os << "Distance: " << t.distance << " Fitness: " << t.fitness << endl;
+    os << "Distance: " << setw(6) << t.distance << " Fitness: " << setw(6) << t.fitness << endl;
     return os;
 }
 
@@ -43,11 +47,20 @@ int tour::number_cities() {
 }
 
 bool tour::in_tour(city test_city) {
-    return find(cities.begin(), cities.end(), test_city) != cities.end();
+    for (const city &temp : cities){
+        if (test_city.name == temp.name){
+            return true;
+        }
+    }
+    return false;
 }
 
 city tour::get_city(int index) {
     return cities[index];
+}
+
+double tour::get_distance() {
+    return distance;
 }
 
 

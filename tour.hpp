@@ -15,9 +15,10 @@ public:
     int number_cities();
     bool in_tour(city test_city);
     city get_city(int index);
-private:
+    double get_distance();
     void calculate_fitness();
     vector<city> cities;
+private:
     double fitness;
     double distance;
 };

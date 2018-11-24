@@ -10,6 +10,8 @@ public:
     string name;
     city();
     int random_coord();
+    int get_x();
+    int get_y();
     friend ostream& operator<<(ostream& os, const city& c);
     friend bool operator==(const city &first, const city &second);
     friend bool operator!=(const city &first, const city &second);
