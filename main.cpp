@@ -9,7 +9,7 @@
 
 constexpr int CITIES_IN_TOUR = 32;
 constexpr int POPULATION_SIZE = 32;
-constexpr int ITERATIONS = 1000;
+constexpr int ITERATIONS = 100;
 
 using namespace std;
 
@@ -42,5 +42,6 @@ int main() {
         coords << "\n";
     }
     coords << "]}\n";
+    system("open ../plot.html");
 
 }
