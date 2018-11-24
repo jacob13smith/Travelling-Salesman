@@ -9,7 +9,7 @@
 
 constexpr int CITIES_IN_TOUR = 32;
 constexpr int POPULATION_SIZE = 32;
-constexpr int ITERATIONS = 1000;
+constexpr int ITERATIONS = 100;
 
 using namespace std;
 
@@ -28,20 +28,15 @@ int main() {
         tours.iterate(i);
     }
     move_best_to_front(tours.list_of_tours);
+    ofstream coords("../coordinates.csv");
 
-    ofstream coords("../coordinates.json");
-    coords << "{\"coordinates\":[\n";
 
-    cities = tours.list_of_tours[0].cities;
+    if (coords) {
+        cities = tours.list_of_tours[0].cities;
 
-    for (int i = 0; i < cities.size(); i++){
-        coords << "{ \"x\" : " << cities[i].get_x() << ", \"y\" : " << cities[i].get_y() << " }";
-        if (i != cities.size() - 1){
-            coords << ",";
+        for (auto &city : cities) {
+            coords << city.get_x() << "," << city.get_y() << "\n";
         }
-        coords << "\n";
+        system("java Main");
     }
-    coords << "]}\n";
-
-
 }
