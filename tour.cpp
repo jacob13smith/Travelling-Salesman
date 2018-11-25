@@ -42,7 +42,7 @@ void tour::add_city(city new_city) {
     cities.push_back(new_city);
 }
 
-int tour::number_cities() {
+int tour::number_cities() const{
     return static_cast<int>(cities.size());
 }
 
@@ -55,7 +55,7 @@ bool tour::in_tour(city test_city) {
     return false;
 }
 
-city tour::get_city(int index) {
+city tour::get_city(int index) const {
     return cities[index];
 }
 
@@ -71,4 +71,11 @@ vector<city> tour::get_cities() {
     return cities;
 }
 
+bool operator==(const tour &first, const tour &second) {
+    for (int i = 0; i < first.number_cities(); i++){
+        if (first.get_city(i) != second.get_city(i))
+            return false;
+    }
+    return true;
+}
 

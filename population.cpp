@@ -5,32 +5,18 @@
 #include "population.hpp"
 
 // Number of parents in each selection pool
-constexpr int PARENT_POOL_SIZE = 5;
+constexpr int PARENT_POOL_SIZE = 8;
 
 // Number of parents to birth new tours
 constexpr int NUMBER_OF_PARENTS = 3;
 
 // Percent chance a tour will mutate (calculated for each city in the tour)
-constexpr int MUTATION_RATE = 10;
+constexpr int MUTATION_RATE = 15;
 
 // Add a tour to the end of a population
 // param new_tour : tour to be added
 void population::add(tour new_tour) {
     list_of_tours.push_back(new_tour);
-}
-
-// Move the fittest tour to the front of the population
-// This is a sort of "loop invariant" that will guarantee
-// the first position in the population has the elite
-// param &list : tour list with the best being moved to front
-void move_best_to_front(vector<tour> &list) {
-    int index = 0;
-    for(int i = 1; i < list.size(); i++){
-        if (list[i].get_fitness() > list[index].get_fitness())
-            index = i;
-    }
-    tour temp = list[index];
-    swap(list[0], list[index]);
 }
 
 // Random number generator between 0 and end (exclusive)
@@ -51,9 +37,6 @@ void population::iterate() {
 
     // New list of tours being created for this population
     vector<tour> new_list;
-
-    // Selection
-    move_best_to_front(list_of_tours);
     new_list.push_back(list_of_tours[0]);
 
     // Crossover
@@ -64,16 +47,19 @@ void population::iterate() {
         // Loop through NUMBER_OF_PARENTS
         for (int j = 0; j < NUMBER_OF_PARENTS; j++){
             // Create parent pool for selection
-            vector<tour> parent_pool;
+            population parent_pool;
             for (int k = 0; k < PARENT_POOL_SIZE; k++){
-
-                // Choose random tour from the list and make it a parent
                 tour random_tour = list_of_tours[random_index(static_cast<int>(list_of_tours.size()))];
-                parent_pool.push_back(random_tour);
+                while (parent_pool.contains(random_tour)){
+                    random_tour = list_of_tours[random_index(static_cast<int>(list_of_tours.size()))];
+                }
+
+                parent_pool.add(random_tour);
+                // Choose random tour from the list and make it a parent
             }
             // Choose the best parent from the list
-            move_best_to_front(parent_pool);
-            parents.push_back(parent_pool[0]);
+            parent_pool.move_best_to_front();
+            parents.push_back(parent_pool.get_list_of_tours()[0]);
         }
 
         // Create random list of indices for parents
@@ -143,6 +129,10 @@ void population::iterate() {
     }
     list_of_tours = new_list;
 
+
+    // Selection  !! I moved this here because it makes more sense to move the elite after each generation
+    move_best_to_front();
+
     // Report
     report_fitnesses();
 }
@@ -164,4 +154,25 @@ void population::report_fitnesses(){
 // Return list of tours
 vector<tour> population::get_list_of_tours() {
     return list_of_tours;
+}
+
+int population::get_gen() {
+    return gen;
+}
+
+void population::move_best_to_front() {
+
+    int index = 0;
+    for(int i = 1; i < list_of_tours.size(); i++){
+        if (list_of_tours[i].get_fitness() > list_of_tours[index].get_fitness())
+            index = i;
+    }
+    swap(list_of_tours[0], list_of_tours[index]);
+}
+
+bool population::contains(tour search) {
+    for (const tour &current : list_of_tours){
+        if (current == search) return true;
+    }
+    return false;
 }

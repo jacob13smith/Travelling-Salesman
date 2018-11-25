@@ -47,16 +47,17 @@ int main() {
     }
 
     // Create thread for first Java instance
-    thread java_before(write_to_file, tours.get_list_of_tours()[0].get_cities(), "Before");
+    thread java_before(write_to_file, tours.get_list_of_tours()[0].get_cities(), "Generation-1");
 
     // Iterate the predetermined number of times
     // Might be changed to improvement factor
+    tours.move_best_to_front();
     for (int i = 0; i < ITERATIONS; i++){
         tours.iterate();
     }
 
     // Create thread for second Java instance
-    thread java_after(write_to_file, tours.get_list_of_tours()[0].get_cities(), "After");
+    thread java_after(write_to_file, tours.get_list_of_tours()[0].get_cities(), "Generation-" + to_string(tours.get_gen()));
 
     // Join both threads and end program
     java_after.join();
