@@ -15,8 +15,11 @@ public:
     int get_gen();
     void move_best_to_front();
 private:
+    tour crossover();
+    void mutate();
     void report_fitnesses();
     int gen = 1;
     vector<tour> list_of_tours;
+    vector<tour> new_list;
     bool contains(tour search);
 };

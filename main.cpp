@@ -38,7 +38,7 @@ void write_to_file(vector<city> cities, const string &title){
 }
 
 void print_constants(){
-    cout << "Starting algorithm using:\n";
+    cout << "STARTING ALGORITHM USING:\n";
     cout << setw(PRINT_WIDTH) << left << "Cities per tour: " << CITIES_IN_TOUR << "\n";
     cout << setw(PRINT_WIDTH) << left << "Tours per population: " << POPULATION_SIZE << "\n";
     population::print_constants();
@@ -98,7 +98,7 @@ int main() {
     double improvement = 1.0 - ((double) distance_after / (double) distance_before);
     cout << setw(PRINT_WIDTH) << left << "\n\nBest beginning tour distance: " << distance_before << "\n";
     cout << setw(PRINT_WIDTH) << left << "Best ending tour distance: " << distance_after << "\n";
-    cout << "Improvement: " << setw(3) << improvement << "%\n";
+    cout << "Improvement: " << setw(3) << improvement * 100<< "%\n";
 
     // Join both threads and end program
     java_after.join();

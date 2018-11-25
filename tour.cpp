@@ -8,13 +8,10 @@
 using namespace std;
 
 int constexpr SCALAR_MULT = 10000;
-constexpr int SHUFFLES = 6;
 
 tour::tour(vector<city> new_cities) {
     cities = std::move(new_cities);
-    for (int i = 0; i < SHUFFLES; i++){
-        shuffle(cities.begin(), cities.end(), std::mt19937(std::random_device()()));
-    }
+    shuffle(cities.begin(), cities.end(), std::mt19937(std::random_device()()));
     calculate_fitness();
 }
 
