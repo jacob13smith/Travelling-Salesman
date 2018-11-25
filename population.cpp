@@ -4,13 +4,24 @@
 #include <iomanip>
 #include "population.hpp"
 
+// Number of parents in each selection pool
 constexpr int PARENT_POOL_SIZE = 5;
+
+// Number of parents to birth new tours
 constexpr int NUMBER_OF_PARENTS = 3;
+
+// Percent chance a tour will mutate (calculated for each city in the tour)
 constexpr int MUTATION_RATE = 10;
 
+// Add a tour to the end of a population
+// param new_tour : tour to be added
 void population::add(tour new_tour) {
     list_of_tours.push_back(new_tour);
 }
+
+// Move the fittest tour to the front of the population
+// This is a sort of "loop invariant" that will guarantee
+// the first position in the population has the elite
 
 void move_best_to_front(vector<tour> &list) {
     int index = 0;
@@ -99,10 +110,18 @@ void population::iterate(int gen) {
     for (int j = 1; j < new_list.size(); j++){
         for (int i = 0; i < new_list[0].number_cities(); i++){
             if (random_index(100) + 1 < MUTATION_RATE){
+                // Not sure the best method for mutating, either swapping with an adjacent, or a
+                // completely random city.  Random city has given best results on average, especially
+                // with more higher iterations
+
+                swap(new_list[j].cities[i], new_list[j].cities[random_index(new_list[j].number_cities())]);
+
+                /*
                 int beside = 1;
                 if (random_index(1))
                     beside = -1;
                 swap(new_list[j].cities[i], new_list[j].cities[(i + beside) % new_list[j].number_cities()]);
+                 */
             }
         }
     }
