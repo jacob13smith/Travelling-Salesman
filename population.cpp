@@ -5,6 +5,7 @@
 #include "population.hpp"
 
 constexpr int PRINT_WIDTH = 30;
+constexpr int REPORT_FREQ = 200;
 
 // Number of parents in each selection pool
 constexpr int DEFAULT_PARENT_POOL_SIZE = 8;
@@ -49,6 +50,7 @@ int random_index(int end){
 // Perform an iteration on this population
 // param this : population getting iterated
 void population::iterate() {
+    if (gen == 1) report_fitnesses();
 
     gen++;
     new_list.clear();
@@ -89,6 +91,9 @@ void population::report_fitnesses(){
     //cout << "Most fit: " << setw(6) << list_of_tours[0].get_fitness() << endl;
     cout << "Generation: " << gen << ", Least distance: " << setw(6) << list_of_tours[0].get_distance() << "\r";
     //cout << "Average fitness: " << setw(6) << average << "\n\n";
+    if (gen % REPORT_FREQ == 0 || gen == 1){
+        cout << "\n";
+    }
 }
 
 // Return list of tours
