@@ -6,7 +6,7 @@
 
 constexpr int PARENT_POOL_SIZE = 5;
 constexpr int NUMBER_OF_PARENTS = 3;
-constexpr int MUTATION_RATE = 15;
+constexpr int MUTATION_RATE = 10;
 
 void population::add(tour new_tour) {
     list_of_tours.push_back(new_tour);
@@ -99,7 +99,10 @@ void population::iterate(int gen) {
     for (int j = 1; j < new_list.size(); j++){
         for (int i = 0; i < new_list[0].number_cities(); i++){
             if (random_index(100) + 1 < MUTATION_RATE){
-                swap(new_list[j].cities[i], new_list[j].cities[(i + 1) % new_list[0].number_cities()]);
+                int beside = 1;
+                if (random_index(1))
+                    beside = -1;
+                swap(new_list[j].cities[i], new_list[j].cities[(i + beside) % new_list[j].number_cities()]);
             }
         }
     }
