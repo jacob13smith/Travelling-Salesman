@@ -11,7 +11,7 @@ constexpr int PARENT_POOL_SIZE = 8;
 constexpr int NUMBER_OF_PARENTS = 3;
 
 // Percent chance a tour will mutate (calculated for each city in the tour)
-constexpr int MUTATION_RATE = 15;
+constexpr int MUTATION_RATE = 7;
 
 // Add a tour to the end of a population
 // param new_tour : tour to be added
