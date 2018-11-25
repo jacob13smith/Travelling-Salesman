@@ -159,7 +159,7 @@ void population::report_fitnesses(){
     for (const tour &temp : list_of_tours){
         total_fitness += temp.get_fitness();
     }
-    double average = total_fitness / list_of_tours.size();
+    // double average = total_fitness / list_of_tours.size();
     cout << flush;
     //cout << "Most fit: " << setw(6) << list_of_tours[0].get_fitness() << endl;
     cout << "Generation: " << gen << ", Least distance: " << setw(6) << list_of_tours[0].get_distance() << "\r";
