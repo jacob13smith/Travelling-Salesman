@@ -10,11 +10,11 @@
 
 constexpr int CITIES_IN_TOUR = 32;
 constexpr int POPULATION_SIZE = 32;
-constexpr int ITERATIONS = 100;
+constexpr int ITERATIONS = 1000;
 
 using namespace std;
 
-void write_to_file(vector<city> cities, string title){
+void write_to_file(vector<city> cities, const string title){
     // Open file to write best list of coordinates
     ofstream coords("../coordinates.csv");
 
@@ -46,18 +46,19 @@ int main() {
         tours.add(temp);
     }
 
-    thread java_before(write_to_file, tours.list_of_tours[0].cities, "Before");
+    // Create thread for first Java instance
+    thread java_before(write_to_file, tours.get_list_of_tours()[0].get_cities(), "Before");
 
     // Iterate the predetermined number of times
     // Might be changed to improvement factor
     for (int i = 0; i < ITERATIONS; i++){
-        tours.iterate(i);
+        tours.iterate();
     }
 
-    // Move the best tour to front after all the iterations
-    move_best_to_front(tours.list_of_tours);
+    // Create thread for second Java instance
+    thread java_after(write_to_file, tours.get_list_of_tours()[0].get_cities(), "After");
 
-    thread java_after(write_to_file, tours.list_of_tours[0].cities, "After");
+    // Join both threads and end program
     java_after.join();
     java_before.join();
 }

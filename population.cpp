@@ -22,7 +22,7 @@ void population::add(tour new_tour) {
 // Move the fittest tour to the front of the population
 // This is a sort of "loop invariant" that will guarantee
 // the first position in the population has the elite
-
+// param &list : tour list with the best being moved to front
 void move_best_to_front(vector<tour> &list) {
     int index = 0;
     for(int i = 1; i < list.size(); i++){
@@ -33,6 +33,8 @@ void move_best_to_front(vector<tour> &list) {
     swap(list[0], list[index]);
 }
 
+// Random number generator between 0 and end (exclusive)
+// param end : exlusive upperbound of random number
 int random_index(int end){
     random_device random_device;
     mt19937 engine{random_device()};
@@ -40,8 +42,14 @@ int random_index(int end){
     return dist(engine);
 }
 
-void population::iterate(int gen) {
+// Perform an iteration on this population
+// param this : population getting iterated
+void population::iterate() {
 
+    // Increment generation counter
+    gen++;
+
+    // New list of tours being created for this population
     vector<tour> new_list;
 
     // Selection
@@ -73,7 +81,9 @@ void population::iterate(int gen) {
         for (int j = 0; j < NUMBER_OF_PARENTS - 1; j++){
             indices.push_back(random_index(list_of_tours[0].number_cities()));
         }
+        // Sort indices in order
         sort(indices.begin(), indices.end());
+        // Add the last index to the end of indices
         indices.push_back(list_of_tours[0].number_cities());
 
         // New tour to be birthed
@@ -114,13 +124,14 @@ void population::iterate(int gen) {
                 // completely random city.  Random city has given best results on average, especially
                 // with more higher iterations
 
-                swap(new_list[j].cities[i], new_list[j].cities[random_index(new_list[j].number_cities())]);
+                int other = random_index(new_list[j].number_cities());
+                new_list[j].city_swap(i, other);
 
                 /*
                 int beside = 1;
                 if (random_index(1))
                     beside = -1;
-                swap(new_list[j].cities[i], new_list[j].cities[(i + beside) % new_list[j].number_cities()]);
+                new_list[j].city_swap(i, i + beside % new_list[j].number_cities())
                  */
             }
         }
@@ -133,10 +144,12 @@ void population::iterate(int gen) {
     list_of_tours = new_list;
 
     // Report
-    report_fitnesses(gen);
+    report_fitnesses();
 }
 
-void population::report_fitnesses(int gen){
+// Report the current fitness level of the population
+// Can change to report different things, I prefer just reporting the distance of the elite
+void population::report_fitnesses(){
     double total_fitness = 0;
     for (const tour &temp : list_of_tours){
         total_fitness += temp.get_fitness();
@@ -146,4 +159,9 @@ void population::report_fitnesses(int gen){
     //cout << "Most fit: " << setw(6) << list_of_tours[0].get_fitness() << endl;
     cout << "Generation: " << gen << ", Least distance: " << setw(6) << list_of_tours[0].get_distance() << "\r";
     //cout << "Average fitness: " << setw(6) << average << "\n\n";
+}
+
+// Return list of tours
+vector<tour> population::get_list_of_tours() {
+    return list_of_tours;
 }

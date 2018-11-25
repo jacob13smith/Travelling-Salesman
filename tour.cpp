@@ -63,4 +63,12 @@ double tour::get_distance() {
     return distance;
 }
 
+void tour::city_swap(int current, int other) {
+    swap(cities[current], cities[other]);
+}
+
+vector<city> tour::get_cities() {
+    return cities;
+}
+
 
