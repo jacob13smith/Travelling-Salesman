@@ -8,14 +8,19 @@
 #include <fstream>
 #include <thread>
 #include <iomanip>
+constexpr int PRINT_WIDTH = 30;
 
-constexpr int CITIES_IN_TOUR = 32;
-constexpr int POPULATION_SIZE = 32;
-constexpr int ITERATIONS = 1000;
+constexpr int DEFAULT_CITIES_IN_TOUR = 32;
+constexpr int DEFAULT_POPULATION_SIZE = 32;
+constexpr int DEFAULT_ITERATIONS = 1000;
+
+int CITIES_IN_TOUR = DEFAULT_CITIES_IN_TOUR;
+int POPULATION_SIZE = DEFAULT_POPULATION_SIZE;
+int ITERATIONS = DEFAULT_ITERATIONS;
 
 using namespace std;
 
-void write_to_file(vector<city> cities, const string title){
+void write_to_file(vector<city> cities, const string &title){
     // Open file to write best list of coordinates
     ofstream coords("../coordinates.csv");
 
@@ -32,7 +37,34 @@ void write_to_file(vector<city> cities, const string title){
     }
 }
 
+void print_constants(){
+    cout << "Starting algorithm using:\n";
+    cout << setw(PRINT_WIDTH) << left << "Cities per tour: " << CITIES_IN_TOUR << "\n";
+    cout << setw(PRINT_WIDTH) << left << "Tours per population: " << POPULATION_SIZE << "\n";
+    population::print_constants();
+    cout << setw(PRINT_WIDTH) << left << "Iterations: " << ITERATIONS << "\n\n";
+}
+
+void ask_user(){
+    char answer;
+    cout << "Use default settings?[Y/n]\n";
+    cin >> answer;
+    if (answer == 'n'){
+        cout << "Number of cities in a tour:\n";
+        cin >> CITIES_IN_TOUR;
+        cout << "Number of tours in a population:\n";
+        cin >> POPULATION_SIZE;
+        cout << "Number of iterations:\n";
+        cin >> ITERATIONS;
+        population::ask_user();
+    }
+
+}
+
 int main() {
+    // Ask user for values
+    ask_user();
+    print_constants();
     // Create cities and store in vector
     vector<city> cities;
     for (int i = 0; i < CITIES_IN_TOUR; i++){
@@ -64,7 +96,9 @@ int main() {
     + to_string(tours.get_gen()) + " - Distance: " + to_string(distance_after) + "\"");
 
     double improvement = 1.0 - ((double) distance_after / (double) distance_before);
-    cout << "\nImprovement: " << setw(3) << improvement << "%\n";
+    cout << setw(PRINT_WIDTH) << left << "\n\nBest beginning tour distance: " << distance_before << "\n";
+    cout << setw(PRINT_WIDTH) << left << "Best ending tour distance: " << distance_after << "\n";
+    cout << "Improvement: " << setw(3) << improvement << "%\n";
 
     // Join both threads and end program
     java_after.join();

@@ -4,14 +4,29 @@
 #include <iomanip>
 #include "population.hpp"
 
+constexpr int PRINT_WIDTH = 30;
+
 // Number of parents in each selection pool
-constexpr int PARENT_POOL_SIZE = 8;
+constexpr int DEFAULT_PARENT_POOL_SIZE = 8;
 
 // Number of parents to birth new tours
-constexpr int NUMBER_OF_PARENTS = 3;
+constexpr int DEFAULT_NUMBER_OF_PARENTS = 3;
 
 // Percent chance a tour will mutate (calculated for each city in the tour)
-constexpr int MUTATION_RATE = 7;
+constexpr int DEFAULT_MUTATION_RATE = 6;
+
+static int PARENT_POOL_SIZE = DEFAULT_PARENT_POOL_SIZE;
+static int NUMBER_OF_PARENTS = DEFAULT_NUMBER_OF_PARENTS;
+static int MUTATION_RATE = DEFAULT_MUTATION_RATE;
+
+void population::ask_user(){
+    cout << "Number of parents per selection pool:\n";
+    cin >> PARENT_POOL_SIZE;
+    cout << "Number of parents per offspring:\n";
+    cin >> NUMBER_OF_PARENTS;
+    cout << "Mutation chance of each city in each tour per iteration(%):\n";
+    cin >> MUTATION_RATE;
+}
 
 // Add a tour to the end of a population
 // param new_tour : tour to be added
@@ -175,4 +190,10 @@ bool population::contains(tour search) {
         if (current == search) return true;
     }
     return false;
+}
+
+void population::print_constants() {
+    cout << setw(PRINT_WIDTH) << left << "Parents per pool: " << PARENT_POOL_SIZE << "\n";
+    cout << setw(PRINT_WIDTH) << left << "Parents per offspring: " << NUMBER_OF_PARENTS << "\n";
+    cout << setw(PRINT_WIDTH) << left << "Mutation rate: " << MUTATION_RATE << "%\n";
 }
