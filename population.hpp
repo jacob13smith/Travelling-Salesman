@@ -13,7 +13,8 @@ public:
     void iterate();
     vector<tour> get_list_of_tours();
     int get_gen();
-    void move_best_to_front();
+    void move_best_to_front(int index);
+    void selection();
 private:
     tour crossover();
     void mutate();

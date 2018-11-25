@@ -10,8 +10,8 @@
 #include <iomanip>
 constexpr int PRINT_WIDTH = 30;
 
-constexpr int DEFAULT_CITIES_IN_TOUR = 32;
-constexpr int DEFAULT_POPULATION_SIZE = 32;
+constexpr int DEFAULT_CITIES_IN_TOUR = 35;
+constexpr int DEFAULT_POPULATION_SIZE = 100;
 constexpr int DEFAULT_ITERATIONS = 1000;
 
 int CITIES_IN_TOUR = DEFAULT_CITIES_IN_TOUR;
@@ -78,15 +78,15 @@ int main() {
         tour temp = tour(cities);
         tours.add(temp);
     }
-    tours.move_best_to_front();
 
+    tours.iterate();
     // Create thread for first Java instance
     int distance_before = (int) tours.get_list_of_tours()[0].get_distance();
     thread java_before(write_to_file, tours.get_list_of_tours()[0].get_cities(), "\"Gen: 1 - Distance: " + to_string(distance_before) + "\"");
 
     // Iterate the predetermined number of times
     // Might be changed to improvement factor
-    for (int i = 0; i < ITERATIONS; i++){
+    for (int i = 2; i < ITERATIONS; i++){
         tours.iterate();
     }
 
@@ -98,7 +98,7 @@ int main() {
     double improvement = 1.0 - ((double) distance_after / (double) distance_before);
     cout << setw(PRINT_WIDTH) << left << "\n\nBest beginning tour distance: " << distance_before << "\n";
     cout << setw(PRINT_WIDTH) << left << "Best ending tour distance: " << distance_after << "\n";
-    cout << "Improvement: " << setw(3) << improvement * 100<< "%\n";
+    cout << "Improvement: " << setprecision(4) << (improvement * 100) << "%\n";
 
     // Join both threads and end program
     java_after.join();

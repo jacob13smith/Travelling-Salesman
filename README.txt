@@ -5,8 +5,8 @@ This program tries to find the most optimal route of randomly located cities/dot
 ------------------------- USER NOTES -------------------------
 
 If you choose to not use the default settings at the beginning, you will be asked for new values.
-The program doesn't sanitize your input (didn't feel like writing the sanitation), so make sure you are inputting
-proper values.  Below is the breakdown of values.
+The program doesn't sanitize your input (I didn't feel like writing the sanitation), so make sure you are inputting
+proper values.  Below is the breakdown of values. They are all integers.
 
 Number of cities in a tour ------------ Default: 32
 This is the number of cities that the "salesman" needs to visit, higher number will take more time but produce
@@ -30,9 +30,14 @@ The number of parent routes that will be combined to form an offspring. These ar
 parent pool. Not sure how many parents is optimal, but I believe in monogamy so I try to keep it around 2-3 ;)
 
 Mutation chance ----------------------- Default: 5
-Every generation, every city in every route has a % chance of being randomly swapped with another random city's spot in
-that route.  Lower mutation rate is favourable at lower iterations, but at higher iterations, mutation rate needs to be
-high enough for the algorithm to be able to try completely new routes.  It's safe to keep this around 5-15.
+Every generation, every city in every route (except the elite) has a % chance of being randomly swapped with another
+random city's spot in that route.  Lower mutation rate is favourable at lower iterations, but at higher iterations,
+mutation rate needs to be high enough for the algorithm to be able to try completely new routes.  It's safe to keep
+this around 5-15.
+
+Number of elites ---------------------- Default: 1
+This is the number of best routes that are saved from mutation every generation.  I have no clue how this affects
+the effectiveness of the algorithm, but it seems like saving more than only the best could be useful.
 
 ----------------------------------------------------------------
 

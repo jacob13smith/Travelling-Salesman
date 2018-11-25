@@ -8,17 +8,20 @@ constexpr int PRINT_WIDTH = 30;
 constexpr int REPORT_FREQ = 200;
 
 // Number of parents in each selection pool
-constexpr int DEFAULT_PARENT_POOL_SIZE = 8;
+constexpr int DEFAULT_PARENT_POOL_SIZE = 4;
 
 // Number of parents to birth new tours
 constexpr int DEFAULT_NUMBER_OF_PARENTS = 3;
 
 // Percent chance a tour will mutate (calculated for each city in the tour)
-constexpr int DEFAULT_MUTATION_RATE = 5;
+constexpr int DEFAULT_MUTATION_RATE = 4;
 
 // Prevents infinite loop looking for unique parents
 constexpr int MAX_PARENT_SEARCH = 20;
 
+constexpr int DEFAULT_ELITES = 20;
+
+static int ELITES = DEFAULT_ELITES;
 static int PARENT_POOL_SIZE = DEFAULT_PARENT_POOL_SIZE;
 static int NUMBER_OF_PARENTS = DEFAULT_NUMBER_OF_PARENTS;
 static int MUTATION_RATE = DEFAULT_MUTATION_RATE;
@@ -30,6 +33,8 @@ void population::ask_user(){
     cin >> NUMBER_OF_PARENTS;
     cout << "Mutation chance of each city in each tour per iteration(%):\n";
     cin >> MUTATION_RATE;
+    cout << "Number of elites saved per generation:\n";
+    cin >> ELITES;
 }
 
 // Add a tour to the end of a population
@@ -43,14 +48,17 @@ void population::add(tour new_tour) {
 int random_index(int end){
     random_device random_device;
     mt19937 engine{random_device()};
-    uniform_int_distribution<int> dist(0, static_cast<int>(end - 1));
+    uniform_int_distribution<int> dist(0, (end - 1));
     return dist(engine);
 }
 
 // Perform an iteration on this population
 // param this : population getting iterated
 void population::iterate() {
-    if (gen == 1) report_fitnesses();
+    if (gen == 1) {
+        selection();
+        report_fitnesses();
+    }
 
     gen++;
     new_list.clear();
@@ -71,13 +79,17 @@ void population::iterate() {
     list_of_tours = new_list;
 
     // Selection  !! I moved this here because it makes more sense to move the elite after each generation
-    move_best_to_front();
+    selection();
 
     // Report
     report_fitnesses();
 }
 
-
+void population::selection(){
+    for (int i = 0; i < ELITES; i++){
+        move_best_to_front(i);
+    }
+}
 
 // Report the current fitness level of the population
 // Can change to report different things, I prefer just reporting the distance of the elite
@@ -105,14 +117,14 @@ int population::get_gen() {
     return gen;
 }
 
-void population::move_best_to_front() {
+void population::move_best_to_front(int index) {
 
-    int index = 0;
-    for(int i = 1; i < list_of_tours.size(); i++){
-        if (list_of_tours[i].get_fitness() > list_of_tours[index].get_fitness())
-            index = i;
+    int best = index;
+    for(int i = index + 1; i < list_of_tours.size(); i++){
+        if (list_of_tours[i].get_fitness() > list_of_tours[best].get_fitness())
+            best = i;
     }
-    swap(list_of_tours[0], list_of_tours[index]);
+    swap(list_of_tours[index], list_of_tours[best]);
 }
 
 bool population::contains(tour search) {
@@ -126,6 +138,7 @@ void population::print_constants() {
     cout << setw(PRINT_WIDTH) << left << "Parents per pool: " << PARENT_POOL_SIZE << "\n";
     cout << setw(PRINT_WIDTH) << left << "Parents per offspring: " << NUMBER_OF_PARENTS << "\n";
     cout << setw(PRINT_WIDTH) << left << "Mutation rate: " << MUTATION_RATE << "%\n";
+    cout << setw(PRINT_WIDTH) << left << "Number of elites: " << ELITES << "\n";
 }
 
 // Crossover parents to create a new tour
@@ -149,7 +162,7 @@ tour population::crossover(){
             // Choose random tour from the list and make it a parent
         }
         // Choose the best parent from the list
-        parent_pool.move_best_to_front();
+        parent_pool.move_best_to_front(0);
         parents.push_back(parent_pool.get_list_of_tours()[0]);
     }
 
@@ -198,7 +211,8 @@ void population::mutate() {
             if (random_index(100) + 1 < MUTATION_RATE){
                 // Not sure the best method for mutating, either swapping with an adjacent, or a
                 // completely random city.  Random city has given best results on average, especially
-                // with more higher iterations
+                // with higher iterations.
+
 
                 int other = random_index(new_list[j].number_cities());
                 new_list[j].city_swap(i, other);
@@ -207,8 +221,9 @@ void population::mutate() {
                 int beside = 1;
                 if (random_index(1))
                     beside = -1;
-                new_list[j].city_swap(i, i + beside % new_list[j].number_cities())
-                 */
+                new_list[j].city_swap(i, (i + beside) % new_list[0].number_cities());
+                */
+
             }
         }
     }
