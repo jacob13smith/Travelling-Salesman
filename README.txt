@@ -47,6 +47,6 @@ This program uses a small JavaFX application to plot the visual improvement of t
 to open the java class file (Main.class) which NEEDS TO BE LOCATED one directory higher than the C++ executable.
 
 It's also important that there is a directory called "dev" in the directory one up from where the C++ executable is.
-This directory is where the JVM spits all it's warnings and errors since we aren't interested in my poor Java skills.
+This directory is where the JVM spits all it's warnings and errors, but we aren't interested in those.
 You still need to make sure you do not close an old JVM instance while running the algorithm again, or else it may not
 be able to find the dev/null directory to print the errors and it will clutter the C++ console.
