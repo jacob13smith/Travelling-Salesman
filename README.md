@@ -1,8 +1,8 @@
--------- Jacob's C++/Java Travelling Salesman --------
+# Jacob's C++/Java Travelling Salesman
 
 This program tries to find the most optimal route of randomly located cities/dots.
 
-------------------------- USER NOTES -------------------------
+## USER NOTES
 
 If you choose to not use the default settings at the beginning, you will be asked for new values.
 The program doesn't sanitize your input (I didn't feel like writing the sanitation), so make sure you are inputting
@@ -39,9 +39,7 @@ Number of elites ---------------------- Default: 1
 This is the number of best routes that are saved from mutation every generation.  I have no clue how this affects
 the effectiveness of the algorithm, but it seems like saving more than only the best could be useful.
 
-----------------------------------------------------------------
-
--------------------------- JAVA PLOT ---------------------------
+# JAVA PLOT
 
 This program uses a small JavaFX application to plot the visual improvement of the algorithm.  It uses a system command
 to open the java class file (Main.class) which NEEDS TO BE LOCATED one directory higher than the C++ executable.
